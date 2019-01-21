@@ -23,13 +23,13 @@ int main()
 	imgFile.open("test.ppm");
 
 	// ---- PARAMETERS -------
-	const int widthPx  = 400;
-	const int heightPx = 400;
+	const int widthPx  = 600;
+	const int heightPx = 600;
 
 	const double ambient = 0.2;
 
 	int eyeDist  = 300;
-	int depth = 5;
+	int depth = 3;
 	// -----------------------
 	
 	const double heightImg = 200; 
@@ -43,7 +43,6 @@ int main()
 	Vector3 test2 = Vector3(1,1,1);
 	
 	Vector3 tast = test2*(test2*(test1 - test0));
-	
 	
 	Vector3 eyePos = Vector3(0,0,-eyeDist);
 

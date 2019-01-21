@@ -1,37 +1,37 @@
 [
 {
-  "directory": "/home/manuel/src/c++/raytracing/build-dir",
-  "command": "/usr/bin/c++   -I/home/manuel/src/c++/raytracing/include    -o CMakeFiles/raytracer.dir/main.cpp.o -c /home/manuel/src/c++/raytracing/main.cpp",
-  "file": "/home/manuel/src/c++/raytracing/main.cpp"
+  "directory": "/home/manuel/src/raytracing-cpp/build",
+  "command": "/usr/bin/c++   -I/home/manuel/src/raytracing-cpp/include    -o CMakeFiles/raytracer.dir/src/main.cpp.o -c /home/manuel/src/raytracing-cpp/src/main.cpp",
+  "file": "/home/manuel/src/raytracing-cpp/src/main.cpp"
 },
 {
-  "directory": "/home/manuel/src/c++/raytracing/build-dir/include",
-  "command": "/usr/bin/c++   -I/home/manuel/src/c++/raytracing/include    -o CMakeFiles/Rays.dir/object.cpp.o -c /home/manuel/src/c++/raytracing/include/object.cpp",
-  "file": "/home/manuel/src/c++/raytracing/include/object.cpp"
+  "directory": "/home/manuel/src/raytracing-cpp/build/include",
+  "command": "/usr/bin/c++   -I/home/manuel/src/raytracing-cpp/include    -o CMakeFiles/Rays.dir/object.cpp.o -c /home/manuel/src/raytracing-cpp/include/object.cpp",
+  "file": "/home/manuel/src/raytracing-cpp/include/object.cpp"
 },
 {
-  "directory": "/home/manuel/src/c++/raytracing/build-dir/include",
-  "command": "/usr/bin/c++   -I/home/manuel/src/c++/raytracing/include    -o CMakeFiles/Rays.dir/sphere.cpp.o -c /home/manuel/src/c++/raytracing/include/sphere.cpp",
-  "file": "/home/manuel/src/c++/raytracing/include/sphere.cpp"
+  "directory": "/home/manuel/src/raytracing-cpp/build/include",
+  "command": "/usr/bin/c++   -I/home/manuel/src/raytracing-cpp/include    -o CMakeFiles/Rays.dir/sphere.cpp.o -c /home/manuel/src/raytracing-cpp/include/sphere.cpp",
+  "file": "/home/manuel/src/raytracing-cpp/include/sphere.cpp"
 },
 {
-  "directory": "/home/manuel/src/c++/raytracing/build-dir/include",
-  "command": "/usr/bin/c++   -I/home/manuel/src/c++/raytracing/include    -o CMakeFiles/Rays.dir/vector.cpp.o -c /home/manuel/src/c++/raytracing/include/vector.cpp",
-  "file": "/home/manuel/src/c++/raytracing/include/vector.cpp"
+  "directory": "/home/manuel/src/raytracing-cpp/build/include",
+  "command": "/usr/bin/c++   -I/home/manuel/src/raytracing-cpp/include    -o CMakeFiles/Rays.dir/vector.cpp.o -c /home/manuel/src/raytracing-cpp/include/vector.cpp",
+  "file": "/home/manuel/src/raytracing-cpp/include/vector.cpp"
 },
 {
-  "directory": "/home/manuel/src/c++/raytracing/build-dir/include",
-  "command": "/usr/bin/c++   -I/home/manuel/src/c++/raytracing/include    -o CMakeFiles/Rays.dir/RGB.cpp.o -c /home/manuel/src/c++/raytracing/include/RGB.cpp",
-  "file": "/home/manuel/src/c++/raytracing/include/RGB.cpp"
+  "directory": "/home/manuel/src/raytracing-cpp/build/include",
+  "command": "/usr/bin/c++   -I/home/manuel/src/raytracing-cpp/include    -o CMakeFiles/Rays.dir/RGB.cpp.o -c /home/manuel/src/raytracing-cpp/include/RGB.cpp",
+  "file": "/home/manuel/src/raytracing-cpp/include/RGB.cpp"
 },
 {
-  "directory": "/home/manuel/src/c++/raytracing/build-dir/include",
-  "command": "/usr/bin/c++   -I/home/manuel/src/c++/raytracing/include    -o CMakeFiles/Rays.dir/light.cpp.o -c /home/manuel/src/c++/raytracing/include/light.cpp",
-  "file": "/home/manuel/src/c++/raytracing/include/light.cpp"
+  "directory": "/home/manuel/src/raytracing-cpp/build/include",
+  "command": "/usr/bin/c++   -I/home/manuel/src/raytracing-cpp/include    -o CMakeFiles/Rays.dir/light.cpp.o -c /home/manuel/src/raytracing-cpp/include/light.cpp",
+  "file": "/home/manuel/src/raytracing-cpp/include/light.cpp"
 },
 {
-  "directory": "/home/manuel/src/c++/raytracing/build-dir/include",
-  "command": "/usr/bin/c++   -I/home/manuel/src/c++/raytracing/include    -o CMakeFiles/Rays.dir/plane.cpp.o -c /home/manuel/src/c++/raytracing/include/plane.cpp",
-  "file": "/home/manuel/src/c++/raytracing/include/plane.cpp"
+  "directory": "/home/manuel/src/raytracing-cpp/build/include",
+  "command": "/usr/bin/c++   -I/home/manuel/src/raytracing-cpp/include    -o CMakeFiles/Rays.dir/plane.cpp.o -c /home/manuel/src/raytracing-cpp/include/plane.cpp",
+  "file": "/home/manuel/src/raytracing-cpp/include/plane.cpp"
 }
 ]
