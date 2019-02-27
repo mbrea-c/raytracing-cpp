@@ -8,6 +8,7 @@
 #include "plane.h"
 #include "RGB.h"
 #include "light.h"
+#include "Image.h"
 
 using namespace std;
 
@@ -19,12 +20,13 @@ RGB ray(Vector3& origin, Vector3& dir, list<Object*>& scn, list<Light>& lights, 
 
 int main()
 {
-	ofstream imgFile;
-	imgFile.open("test.ppm");
+	//imgFile.open("test.ppm");
 
 	// ---- PARAMETERS -------
 	const int widthPx  = 600;
 	const int heightPx = 600;
+
+	Image* img = new Image(widthPx, heightPx);
 
 	const double ambient = 0.2;
 
@@ -85,10 +87,8 @@ int main()
 	cout << "(" << tast.x << "," << tast.y << "," << tast.z << ")" << endl;
 
 
-	imgFile << "P3" << endl;
-	imgFile << widthPx << " " << heightPx << endl;
-	imgFile << "255" << endl;
-
+	// Copying buffer to img object. This should be
+	// temporary
 	for (int i = 0; i < heightPx; i++)
 	{
 		for (int j = 0; j < widthPx; j++)
@@ -97,11 +97,11 @@ int main()
 			int g = buffer[i][j].g;
 			int b = buffer[i][j].b;
 
-			imgFile << r << " " << g << " " << b << " ";
-		}
-		imgFile << endl;
+			img->setPixel(j, i, r, g, b);
 
+		}
 	}
+	img->writePPM("test.bmp");
 	return 0;
 }
 

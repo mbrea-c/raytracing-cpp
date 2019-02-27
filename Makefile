@@ -1,5 +1,6 @@
 OBJS = src/main.cpp src/vector.cpp src/sphere.cpp src/RGB.cpp \
-       src/plane.cpp src/object.cpp src/light.cpp
+       src/plane.cpp src/object.cpp src/light.cpp src/Image.h \
+       src/Image.cpp
 
 #compiler we're using
 CC = g++
