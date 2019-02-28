@@ -13,6 +13,7 @@
 using namespace std;
 
 
+SDL_Window* init(int widthPx, int heightPx);
 list<Intersection> intersection(Vector3& origin, Vector3& dir, list<Object*>& scn);
 RGB ray(Vector3& origin, Vector3& dir, list<Object*>& scn, list<Light>& lights, double ambient, int depth);
 
@@ -30,14 +31,20 @@ int main()
 	int depth = 3;
 	// -----------------------
 	
+	// Compute image height and width in abstract scene units
+	// This ensures aspect ratio is preserved and scale is kept
+	// constant in different resolutions
 	const double heightImg = 200; 
 	const double stepSize = heightImg / (float)heightPx;
-
 	const double widthImg = stepSize * (float)widthPx;
 	
 	Vector3 eyePos = Vector3(0,0,-eyeDist);
 
+	// Create Image object, initialize SDL for showing graphics
+	// window
 	Image* img = new Image(widthPx, heightPx);
+	SDL_Window*  gWindow  = init(widthPx, heightPx);
+	SDL_Surface* gSurface = SDL_GetWindowSurface(gWindow);
 	list<Object*> scene;
 
 	// --- Adding objects to the scene ---
@@ -46,7 +53,7 @@ int main()
 	scene.push_front(new  Plane(Vector3(0,1,0),     100, (RGB){200,0,0}, 0.1));
 	scene.push_front(new  Plane(Vector3(0,0,-1),    350, (RGB){0,0,0},     1));
 	scene.push_front(new  Plane(Vector3(0,0,1),     650, (RGB){0,0,0},     1));
-	// ----------------------------------
+	// -----------------------------------
 
 	list<Light> lights;
 
@@ -70,14 +77,45 @@ int main()
 			
 		}
 	}
+
+	// Writing final image to screen buffer
+	img->blitToSurface(gSurface);
+	SDL_UpdateWindowSurface(gWindow);
 	
 	// Write final image to file
 	printf("Writing image to file...\n");
 	img->writePPM("test.bmp");
 	printf("Done!\n");
 
+	// Prevent window from closing instantly
+	SDL_Delay(5000);
+
 	return 0;
 }
+
+// Takes care of SDL initialization
+SDL_Window* init(int widthPx, int heightPx)
+{
+	//Initialize SDL
+	if (SDL_Init(SDL_INIT_VIDEO) < 0)
+	{
+		printf("SDL could not initialize!: %s\n", SDL_GetError());
+		return NULL;
+	}
+
+	//Create window
+	SDL_Window* gWindow = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, 
+	                           SDL_WINDOWPOS_UNDEFINED, widthPx, 
+	                           heightPx, SDL_WINDOW_SHOWN);
+	if (gWindow == NULL)
+	{
+		printf("Window could not be created!: %s\n", SDL_GetError());
+		return NULL;
+	}
+
+	return gWindow;
+}
+
 
 RGB ray(Vector3& origin, Vector3& dir, list<Object*>& scn, list<Light>& lights, double ambient, int depth)
 {

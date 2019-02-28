@@ -7,20 +7,6 @@ using namespace std;
 
 Image::Image(int widthPx, int heightPx)
 {
-	//Uint32 rmask, gmask, bmask, amask;
-
-//#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-	//rmask = 0xff000000;
-	//gmask = 0x00ff0000;
-	//bmask = 0x0000ff00;
-	//amask = 0x000000ff;
-//#else
-	//rmask = 0x000000ff;
-	//gmask = 0x0000ff00;
-	//bmask = 0x00ff0000;
-	//amask = 0xff000000;
-//#endif
-
 	surface = SDL_CreateRGBSurface(0, widthPx, heightPx, 32, 0,0,0,0);
 	if (surface == NULL)
 	{
@@ -28,6 +14,15 @@ Image::Image(int widthPx, int heightPx)
 		printf("Something went wrong in Image::Image\n");
 		exit(1);
 	}
+
+	this->widthPx  = widthPx;
+	this->heightPx = heightPx;
+}
+
+Image::~Image()
+{
+	SDL_FreeSurface(surface);
+	surface = NULL;
 }
 
 void Image::blitToSurface(SDL_Surface* dest)
@@ -51,35 +46,11 @@ void Image::setPixel(int x, int y, Uint8 r, Uint8 g, Uint8 b)
 
 void Image::setPixel(int x, int y, RGB color)
 {
-	Uint32 pixel = SDL_MapRGB(surface->format, color.r, color.g, color.b);
-	Uint8  bytesPerPixel = surface->format->BytesPerPixel;
-	Uint8 *target_pixel = (Uint8 *) surface->pixels + y * surface->pitch + x * bytesPerPixel;
-	
-	*(Uint32*)target_pixel = pixel;
+	this->setPixel(x, y, color.r, color.g, color.b);
 }
 
 void Image::writePPM(string filename)
 {
-	//ofstream imgFile;
-	//imgFile.open(filename);
-
-	//imgFile << "P3" << endl;
-	//imgFile << widthPx << " " << heightPx << endl;
-	//imgFile << "255" << endl;
-
-	//for (int i = 0; i < heightPx; i++)
-	//{
-		//for (int j = 0; j < widthPx; j++)
-		//{
-			//int r = buffer[i][j].r;
-			//int g = buffer[i][j].g;
-			//int b = buffer[i][j].b;
-
-			//imgFile << r << " " << g << " " << b << " ";
-		//}
-		//imgFile << endl;
-	//}
-	
 	SDL_SaveBMP(surface, filename.c_str());
 }
 
