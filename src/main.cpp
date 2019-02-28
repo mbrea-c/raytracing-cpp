@@ -20,13 +20,9 @@ RGB ray(Vector3& origin, Vector3& dir, list<Object*>& scn, list<Light>& lights, 
 
 int main()
 {
-	//imgFile.open("test.ppm");
-
 	// ---- PARAMETERS -------
 	const int widthPx  = 600;
 	const int heightPx = 600;
-
-	Image* img = new Image(widthPx, heightPx);
 
 	const double ambient = 0.2;
 
@@ -39,19 +35,9 @@ int main()
 
 	const double widthImg = stepSize * (float)widthPx;
 	
-	
-	Vector3 test0 = Vector3(2,3,1);
-	Vector3 test1 = Vector3(1,1,2);
-	Vector3 test2 = Vector3(1,1,1);
-	
-	Vector3 tast = test2*(test2*(test1 - test0));
-	
 	Vector3 eyePos = Vector3(0,0,-eyeDist);
 
-	RGB **buffer = new RGB*[heightPx];
-	for (int i = 0; i < heightPx; i++)
-		buffer[i] = new RGB[widthPx];
-
+	Image* img = new Image(widthPx, heightPx);
 	list<Object*> scene;
 
 	// --- Adding objects to the scene ---
@@ -67,11 +53,12 @@ int main()
 	// --- Adding lights to the scene ---
 	// NOTE: Only one light is supported right now
 	// 	 You can add more if you want, but weird
-	// 	 shit might happen.
+	// 	 things might happen.
 	lights.push_front((Light){Vector3(100,500,-500), 100});
 	// ----------------------------------
 
-	// Shoot rays like crazy
+	// Shoot rays to render the scene
+	printf("Rendering scene...\n");
 	for (int i = 0; i < heightPx; i++)
 	{
 		for (int j = 0; j < widthPx; j++)
@@ -79,29 +66,16 @@ int main()
 			Vector3 pixPos = Vector3(-widthImg / 2 + (float)j*stepSize, heightImg / 2 - (float)i*stepSize, 0);
 			Vector3 dir = (pixPos - eyePos).norm();
 
-			buffer[i][j] = ray(eyePos, dir, scene, lights, ambient, depth);
+			img->setPixel(j, i, ray(eyePos, dir, scene, lights, ambient, depth));
 			
 		}
 	}
 	
-	cout << "(" << tast.x << "," << tast.y << "," << tast.z << ")" << endl;
-
-
-	// Copying buffer to img object. This should be
-	// temporary
-	for (int i = 0; i < heightPx; i++)
-	{
-		for (int j = 0; j < widthPx; j++)
-		{
-			int r = buffer[i][j].r;
-			int g = buffer[i][j].g;
-			int b = buffer[i][j].b;
-
-			img->setPixel(j, i, r, g, b);
-
-		}
-	}
+	// Write final image to file
+	printf("Writing image to file...\n");
 	img->writePPM("test.bmp");
+	printf("Done!\n");
+
 	return 0;
 }
 
@@ -111,11 +85,6 @@ RGB ray(Vector3& origin, Vector3& dir, list<Object*>& scn, list<Light>& lights, 
 	list<Intersection> minimumList = intersection(origin, dir, scn);
 	RGB pixColor;
 	
-	//------DEBUG-------
-	//cout << "--------- ray starts here -----------"	 << endl;
-	//------------------
-
-
 	if (minimumList.size() < 1) 
 	{
 		pixColor.r = 0;

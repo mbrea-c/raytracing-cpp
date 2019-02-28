@@ -49,6 +49,15 @@ void Image::setPixel(int x, int y, Uint8 r, Uint8 g, Uint8 b)
 	*(Uint32*)target_pixel = pixel;
 }
 
+void Image::setPixel(int x, int y, RGB color)
+{
+	Uint32 pixel = SDL_MapRGB(surface->format, color.r, color.g, color.b);
+	Uint8  bytesPerPixel = surface->format->BytesPerPixel;
+	Uint8 *target_pixel = (Uint8 *) surface->pixels + y * surface->pitch + x * bytesPerPixel;
+	
+	*(Uint32*)target_pixel = pixel;
+}
+
 void Image::writePPM(string filename)
 {
 	//ofstream imgFile;
