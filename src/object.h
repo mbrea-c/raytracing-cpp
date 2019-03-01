@@ -22,6 +22,7 @@ protected:
 	double reflectiveness;
 public:
 	Vector3 getPos();
+	void translate(Vector3 mov);
 	virtual std::list<Intersection> intersect (Vector3& origin, Vector3& direction);
 
 };
