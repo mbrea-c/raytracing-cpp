@@ -12,6 +12,7 @@ class Image {
 
 	public:
 		Image(int widthPx, int heightPx);
+		Image(int widthPx, int heightPx, Uint32 format);
 		~Image();
 		void setPixel(int x, int y, Uint8 r, Uint8 g, Uint8 b);
 		void setPixel(int x, int y, RGB color);

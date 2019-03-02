@@ -19,6 +19,20 @@ Image::Image(int widthPx, int heightPx)
 	this->heightPx = heightPx;
 }
 
+Image::Image(int widthPx, int heightPx, Uint32 format)
+{
+	surface = SDL_CreateRGBSurfaceWithFormat(0, widthPx, heightPx, 32, format);
+	if (surface == NULL)
+	{
+		//TODO: Implement proper error handling
+		printf("Something went wrong in Image::Image\n");
+		exit(1);
+	}
+
+	this->widthPx  = widthPx;
+	this->heightPx = heightPx;
+}
+
 Image::~Image()
 {
 	SDL_FreeSurface(surface);
@@ -27,7 +41,8 @@ Image::~Image()
 
 void Image::blitToSurface(SDL_Surface* dest)
 {
-	if (SDL_BlitSurface(surface, NULL, dest, NULL) < 0)
+	SDL_Rect stretchRect = {0,0, dest->w, dest->h};
+	if (SDL_BlitScaled(surface, NULL, dest, &stretchRect) < 0)
 	{
 		//TODO: Implement proper error handling
 		printf("Something went wrong in Image::blitToSurface\n");

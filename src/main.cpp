@@ -28,14 +28,19 @@ RGB ray(Vector3& origin, Vector3& dir, list<Object*>& scn, list<Light>& lights,
 int main()
 {
 	// ---- PARAMETERS -------
-	const int widthPx  = 600;
-	const int heightPx = 600;
+	const int widthPx  = 100;
+	const int heightPx = 100;
+
+	const int windowScale = 8;
 
 	const double ambient = 0.2;
 
 	int eyeDist  = 300;
 	int depth = 2;
 	// -----------------------
+	// Compute window size
+	const int windowWidth  = widthPx  * windowScale;
+	const int windowHeight = heightPx * windowScale;
 	
 	// Compute image height and width in abstract scene units
 	// This ensures aspect ratio is preserved and scale is kept
@@ -49,12 +54,13 @@ int main()
 	// Create Image object, initialize SDL for showing graphics
 	// window
 	Image* img = new Image(widthPx, heightPx);
-	SDL_Window*  gWindow  = init(widthPx, heightPx);
+	SDL_Window*  gWindow  = init(windowWidth, windowHeight);
 	SDL_Surface* gSurface = SDL_GetWindowSurface(gWindow);
 	list<Object*> scene;
 
 	// --- Adding objects to the scene ---
-	scene.push_front(new  Plane(Vector3(0,1,0),     100, (RGB){200,0,0}, 0.1));
+	scene.push_front(new  Plane(Vector3(0,1,0),     50, (RGB){200,0,0}, 0.6));
+	scene.push_front(new  Plane(Vector3(0,-1,0),    1000,(RGB){0,140,255}, 0.0));
 	scene.push_front(new Sphere(Vector3(-75,0,100),  50, (RGB){0,200,0}, 0.5));
 	scene.push_front(new Sphere(Vector3(-25,75,0),   50, (RGB){0,0,200}, 0.5));
 	// -----------------------------------
@@ -102,23 +108,22 @@ int main()
 		// Handle keyboard
 		if (keyboard[SDL_SCANCODE_J])
 		{
-			scene.front()->translate(Vector3(0,-1,0));
+			scene.front()->translate(Vector3(0,-5,0));
 		}
 		if (keyboard[SDL_SCANCODE_K])
 		{
-			scene.front()->translate(Vector3(0,1,0));
+			scene.front()->translate(Vector3(0,5,0));
 		}
 		if (keyboard[SDL_SCANCODE_H])
 		{
-			scene.front()->translate(Vector3(-1,0,0));
+			scene.front()->translate(Vector3(-5,0,0));
 		}
 		if (keyboard[SDL_SCANCODE_L])
 		{
-			scene.front()->translate(Vector3(1,0,0));
+			scene.front()->translate(Vector3(5,0,0));
 		}
 
 		// Shoot rays to render the scene
-		printf("Rendering scene...\n");
 		for (int i = 0; i < heightPx; i++)
 		{
 			for (int j = 0; j < widthPx; j++)
@@ -126,7 +131,6 @@ int main()
 				Vector3 pixPos = Vector3(-widthImg / 2 + (float)j*stepSize, 
 						heightImg / 2 - (float)i*stepSize, 0);
 				Vector3 dir = (pixPos - eyePos).norm();
-
 				img->setPixel(j, i, ray(eyePos, dir, scene, lights, ambient, depth));
 
 			}
