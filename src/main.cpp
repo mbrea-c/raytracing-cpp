@@ -2,13 +2,14 @@
 #include <fstream>
 #include <cmath>
 #include <list>
-#include "object.h"
-#include "vector.h"
-#include "sphere.h"
-#include "plane.h"
+#include "GameObject.h"
+#include "Vector.h"
+#include "Sphere.h"
+#include "Plane.h"
 #include "RGB.h"
-#include "light.h"
+#include "Light.h"
 #include "Image.h"
+#include "Camera.h"
 
 using namespace std;
 
@@ -16,16 +17,7 @@ using namespace std;
 // Takes care of SDL initialization
 SDL_Window* init(int widthPx, int heightPx);
 
-// Finds all intersections of a ray with a scene
-list<Intersection> intersection(Vector3& origin, Vector3& dir, list<Object*>& scn);
-
-// Finds ray color
-RGB ray(Vector3& origin, Vector3& dir, list<Object*>& scn, list<Light>& lights, 
-        double ambient, int depth);
-
-
-
-int main()
+int main(int argc, char** argv)
 {
 	// ---- PARAMETERS -------
 	const int widthPx  = 100;
@@ -37,28 +29,32 @@ int main()
 
 	int eyeDist  = 300;
 	int depth = 2;
+
+	// controls
+	double turnSpeed = 0.05; // radians per second
+	double moveSpeed = 5; // arbitrary units per second
 	// -----------------------
+	
+	 //Parsing command-line arguments
+	//for (int i = 0; i < argc; i++)
+		//if (strcmp(argv[i], "-v") == 0) {
+			
+		//}
+
 	// Compute window size
 	const int windowWidth  = widthPx  * windowScale;
 	const int windowHeight = heightPx * windowScale;
-	
-	// Compute image height and width in abstract scene units
-	// This ensures aspect ratio is preserved and scale is kept
-	// constant in different resolutions
-	const double heightImg = 200; 
-	const double stepSize = heightImg / (float)heightPx;
-	const double widthImg = stepSize * (float)widthPx;
-	
-	Vector3 eyePos = Vector3(0,0,-eyeDist);
 
-	// Create Image object, initialize SDL for showing graphics
+	Camera *mainCamera = new Camera(Vector3(0,220,-eyeDist), Vector3(0,-0.5,1), depth, ambient, eyeDist);
+
+	// Create Image GameObject, initialize SDL for showing graphics
 	// window
 	Image* img = new Image(widthPx, heightPx);
 	SDL_Window*  gWindow  = init(windowWidth, windowHeight);
 	SDL_Surface* gSurface = SDL_GetWindowSurface(gWindow);
-	list<Object*> scene;
+	list<GameObject*> scene;
 
-	// --- Adding objects to the scene ---
+	// --- Adding GameObjects to the scene ---
 	scene.push_front(new  Plane(Vector3(0,1,0),     50, (RGB){200,0,0}, 0.6));
 	scene.push_front(new  Plane(Vector3(0,-1,0),    1000,(RGB){0,140,255}, 0.0));
 	scene.push_front(new Sphere(Vector3(-75,0,100),  50, (RGB){0,200,0}, 0.5));
@@ -94,7 +90,7 @@ int main()
 						case SDLK_q:
 							exitFlag = true;
 							break;
-						case SDLK_w:
+						case SDLK_p:
 							printf("Writing image to file...\n");
 							img->writePPM("test.bmp");
 							printf("Done!\n");
@@ -106,35 +102,48 @@ int main()
 		}
 		
 		// Handle keyboard
-		if (keyboard[SDL_SCANCODE_J])
+		if (keyboard[SDL_SCANCODE_LSHIFT])
 		{
-			scene.front()->translate(Vector3(0,-5,0));
+			mainCamera->translateRelative(Vector3(0,-moveSpeed,0));
 		}
-		if (keyboard[SDL_SCANCODE_K])
+		if (keyboard[SDL_SCANCODE_SPACE])
 		{
-			scene.front()->translate(Vector3(0,5,0));
+			mainCamera->translateRelative(Vector3(0,moveSpeed,0));
 		}
-		if (keyboard[SDL_SCANCODE_H])
+		if (keyboard[SDL_SCANCODE_A])
 		{
-			scene.front()->translate(Vector3(-5,0,0));
+			mainCamera->translateRelative(Vector3(-moveSpeed,0,0));
 		}
-		if (keyboard[SDL_SCANCODE_L])
+		if (keyboard[SDL_SCANCODE_D])
 		{
-			scene.front()->translate(Vector3(5,0,0));
+			mainCamera->translateRelative(Vector3(moveSpeed,0,0));
+		}
+		if (keyboard[SDL_SCANCODE_W])
+		{
+			mainCamera->translateRelative(Vector3(0,0,moveSpeed));
+		}
+		if (keyboard[SDL_SCANCODE_S])
+		{
+			mainCamera->translateRelative(Vector3(0,0,-moveSpeed));
+		}
+		if (keyboard[SDL_SCANCODE_UP])
+		{
+			mainCamera->rotate(0,-turnSpeed);
+		}
+		if (keyboard[SDL_SCANCODE_DOWN])
+		{
+			mainCamera->rotate(0,turnSpeed);
+		}
+		if (keyboard[SDL_SCANCODE_RIGHT])
+		{
+			mainCamera->rotate(-turnSpeed,0);
+		}
+		if (keyboard[SDL_SCANCODE_LEFT])
+		{
+			mainCamera->rotate(turnSpeed,0);
 		}
 
-		// Shoot rays to render the scene
-		for (int i = 0; i < heightPx; i++)
-		{
-			for (int j = 0; j < widthPx; j++)
-			{
-				Vector3 pixPos = Vector3(-widthImg / 2 + (float)j*stepSize, 
-						heightImg / 2 - (float)i*stepSize, 0);
-				Vector3 dir = (pixPos - eyePos).norm();
-				img->setPixel(j, i, ray(eyePos, dir, scene, lights, ambient, depth));
-
-			}
-		}
+		mainCamera->renderImage(img, scene, lights);
 
 		// Writing final image to screen buffer
 		img->blitToSurface(gSurface);
@@ -168,88 +177,3 @@ SDL_Window* init(int widthPx, int heightPx)
 }
 
 
-RGB ray(Vector3& origin, Vector3& dir, list<Object*>& scn, list<Light>& lights, double ambient, int depth)
-{
-
-	list<Intersection> minimumList = intersection(origin, dir, scn);
-	RGB pixColor;
-	
-	if (minimumList.size() < 1) 
-	{
-		pixColor.r = 0;
-		pixColor.g = 0;
-		pixColor.b = 0;
-		return pixColor;
-	}
-
-	Intersection minimum = minimumList.front();
-	pixColor = minimum.col;
-
-	// Compute the ray towards the point light
-	for ( auto light : lights )
-	{
-		Vector3 lVec = (light.pos - minimum.p);
-		Vector3 lDir = lVec.norm();
-		list<Intersection> shadowing = intersection(minimum.p, lDir, scn);
-		if ((shadowing.size() > 0) && (lVec.len() > (shadowing.front().p - minimum.p).len())) 
-		{
-			pixColor.r *= ambient;
-			pixColor.g *= ambient;
-			pixColor.b *= ambient;
-		} else
-		{
-			double cosine = lDir*minimum.n;
-			if (cosine < 0) cosine = 0;
-			cosine = ambient + (cosine * (1-ambient));
-			pixColor.r *= cosine;
-			pixColor.g *= cosine;
-			pixColor.b *= cosine;
-		}
-	}
-	if(depth <= 1) return pixColor;
-
-	Vector3 reflexDir = ((2*(minimum.n * (((-1)*dir) * minimum.n)))+dir);
-	RGB reflexCol = ray(minimum.p, reflexDir, scn, lights, ambient, depth-1);
-
-	double reflex  = minimum.reflex;
-	double nreflex = 1 - reflex;
-
-
-	pixColor.r = nreflex*pixColor.r + reflex*reflexCol.r;
-	pixColor.g = nreflex*pixColor.g + reflex*reflexCol.g;
-	pixColor.b = nreflex*pixColor.b + reflex*reflexCol.b;
-	
-
-	return pixColor;
-}
-
-list<Intersection> intersection(Vector3& origin, Vector3& dir, list<Object*>& scn)
-{
-	list<Intersection> candidates;
-	list<Intersection> result;
-
-	for (auto obj : scn)
-	{
-		for (auto x : obj->intersect(origin, dir)) candidates.push_front(x);
-	}
-
-	if (candidates.size() < 1) return result;
-
-	Intersection minimum = candidates.front();
-	double minimumLen    = (minimum.p - origin).len();
-	candidates.pop_front();
-
-	for (auto cand : candidates)
-	{
-		double localLen = (cand.p - origin).len();
-		if ((localLen < minimumLen) && (localLen > 0))
-		{
-			minimum    = cand;
-		}
-	}
-
-
-	result.push_front(minimum);
-
-	return result;
-}

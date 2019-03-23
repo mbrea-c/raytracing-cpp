@@ -1,6 +1,6 @@
-OBJS = src/main.cpp src/vector.cpp src/sphere.cpp src/RGB.cpp \
-       src/plane.cpp src/object.cpp src/light.cpp src/Image.h \
-       src/Image.cpp
+OBJS = src/main.cpp src/Vector.cpp src/Sphere.cpp src/RGB.cpp \
+       src/Plane.cpp src/GameObject.cpp src/Light.cpp src/Image.cpp \
+       src/Camera.cpp
 
 #compiler we're using
 CC = g++

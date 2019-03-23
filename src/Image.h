@@ -14,6 +14,8 @@ class Image {
 		Image(int widthPx, int heightPx);
 		Image(int widthPx, int heightPx, Uint32 format);
 		~Image();
+		int getHeight();
+		int getWidth();
 		void setPixel(int x, int y, Uint8 r, Uint8 g, Uint8 b);
 		void setPixel(int x, int y, RGB color);
 		void writePPM(std::string filename);

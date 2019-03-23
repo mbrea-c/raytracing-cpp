@@ -1,5 +1,5 @@
 #include <iostream>
-#include "plane.h"
+#include "Plane.h"
 
 Plane::Plane(Vector3 n, double c, RGB col)
 {

@@ -33,12 +33,6 @@ Image::Image(int widthPx, int heightPx, Uint32 format)
 	this->heightPx = heightPx;
 }
 
-Image::~Image()
-{
-	SDL_FreeSurface(surface);
-	surface = NULL;
-}
-
 void Image::blitToSurface(SDL_Surface* dest)
 {
 	SDL_Rect stretchRect = {0,0, dest->w, dest->h};
@@ -69,7 +63,19 @@ void Image::writePPM(string filename)
 	SDL_SaveBMP(surface, filename.c_str());
 }
 
+int Image::getHeight() {
+	return heightPx;
+}
 
+int Image::getWidth() {
+	return widthPx;
+}
+
+Image::~Image()
+{
+	SDL_FreeSurface(surface);
+	surface = NULL;
+}
 
 
 

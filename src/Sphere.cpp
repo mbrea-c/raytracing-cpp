@@ -1,6 +1,6 @@
 #include <iostream>
-#include "sphere.h"
-#include "cmath"
+#include <cmath>
+#include "Sphere.h"
 
 
 Sphere::Sphere(Vector3 p, double r, RGB col)

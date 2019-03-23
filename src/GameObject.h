@@ -2,7 +2,7 @@
 #define OBJECT_H
 
 #include <list>
-#include "vector.h"
+#include "Vector.h"
 #include "RGB.h"
 
 // This should only be here temporarily(TM)
@@ -14,7 +14,7 @@ struct Intersection
 	double reflex;
 };
 
-class Object
+class GameObject
 {
 protected:
 	Vector3 pos;
@@ -24,7 +24,6 @@ public:
 	Vector3 getPos();
 	void translate(Vector3 mov);
 	virtual std::list<Intersection> intersect (Vector3& origin, Vector3& direction);
-
 };
 
 #endif

@@ -1,10 +1,10 @@
 #ifndef PLANE_H
 #define PLANE_H
 
-#include "vector.h"
-#include "object.h"
+#include "Vector.h"
+#include "GameObject.h"
 
-class Plane : public Object
+class Plane : public GameObject
 {
 private:
 	Vector3 normal;

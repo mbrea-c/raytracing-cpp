@@ -1,8 +1,10 @@
-#include "vector.h"
-#include "cmath"
+#include <cmath>
+#include <iostream>
+#include "Vector.h"
 
 
 
+using namespace std;
 
 Vector3::Vector3(double x0, double y0, double z0)
 {
@@ -53,5 +55,9 @@ double Vector3::len()
 Vector3 Vector3::norm()
 {
 	return (*this)*(1/len());
+}
 
+Vector3 Vector3::cross(Vector3 v)
+{
+	return Vector3(y*v.z - z*v.y, z*v.x - x*v.z, x*v.y - y*v.x);
 }

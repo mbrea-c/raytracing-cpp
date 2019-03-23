@@ -1,6 +1,8 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
+using namespace std;
+
 class Vector3
 {
 public:
@@ -13,8 +15,7 @@ public:
 
 	double  len();
 	Vector3 norm();
-
-	
+	Vector3 cross(Vector3 v);
 };
 
 Vector3 operator*(Vector3 v, double scalar);

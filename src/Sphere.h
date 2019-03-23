@@ -1,11 +1,11 @@
 #ifndef SPHERE_H
 #define SPHERE_H
 
-#include "object.h"
-#include "vector.h"
+#include "GameObject.h"
+#include "Vector.h"
 #include <list>
 
-class Sphere : public Object
+class Sphere : public GameObject
 {
 	double radius;
 public:
