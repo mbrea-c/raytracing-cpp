@@ -16,6 +16,7 @@ public:
 	double  len();
 	Vector3 norm();
 	Vector3 cross(Vector3 v);
+	Vector3 fromBasis(Vector3 v0, Vector3 v1, Vector3 v2);
 };
 
 Vector3 operator*(Vector3 v, double scalar);

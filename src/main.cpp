@@ -1,7 +1,9 @@
 #include <iostream>
 #include <fstream>
 #include <cmath>
+#include <stdlib.h>
 #include <list>
+#include <time.h>
 #include "GameObject.h"
 #include "Vector.h"
 #include "Sphere.h"
@@ -17,6 +19,10 @@ using namespace std;
 // Takes care of SDL initialization
 SDL_Window* init(int widthPx, int heightPx);
 
+// Randomly generates scene
+list<GameObject*> generateScene();
+
+
 int main(int argc, char** argv)
 {
 	// ---- PARAMETERS -------
@@ -27,7 +33,7 @@ int main(int argc, char** argv)
 
 	const double ambient = 0.2;
 
-	int eyeDist  = 300;
+	int eyeDist  = 200;
 	int depth = 2;
 
 	// controls
@@ -46,20 +52,16 @@ int main(int argc, char** argv)
 	const int windowHeight = heightPx * windowScale;
 
 	Camera *mainCamera = new Camera(Vector3(0,220,-eyeDist), Vector3(0,-0.5,1), depth, ambient, eyeDist);
+	srand(time(0));
 
 	// Create Image GameObject, initialize SDL for showing graphics
 	// window
 	Image* img = new Image(widthPx, heightPx);
 	SDL_Window*  gWindow  = init(windowWidth, windowHeight);
 	SDL_Surface* gSurface = SDL_GetWindowSurface(gWindow);
-	list<GameObject*> scene;
+	list<GameObject*> scene = generateScene();
 
-	// --- Adding GameObjects to the scene ---
-	scene.push_front(new  Plane(Vector3(0,1,0),     50, (RGB){200,0,0}, 0.6));
-	scene.push_front(new  Plane(Vector3(0,-1,0),    1000,(RGB){0,140,255}, 0.0));
-	scene.push_front(new Sphere(Vector3(-75,0,100),  50, (RGB){0,200,0}, 0.5));
-	scene.push_front(new Sphere(Vector3(-25,75,0),   50, (RGB){0,0,200}, 0.5));
-	// -----------------------------------
+
 
 	list<Light> lights;
 
@@ -94,6 +96,10 @@ int main(int argc, char** argv)
 							printf("Writing image to file...\n");
 							img->writePPM("test.bmp");
 							printf("Done!\n");
+							break;
+						case SDLK_r:
+							printf("Rerolling scene...\n");
+							scene = generateScene();
 							break;
 					}
 					break;
@@ -174,6 +180,19 @@ SDL_Window* init(int widthPx, int heightPx)
 	}
 
 	return gWindow;
+}
+
+list<GameObject*> generateScene() {
+	list<GameObject*> scene;
+	
+	scene.push_front(new  Plane(Vector3(0,1,0),     50, (RGB){200,0,0}, 0.6));
+	for (int i = 0; i < 5; i++) {
+		scene.push_front(new Sphere(Vector3(rand() % 300, rand() % 300, rand() % 300), 
+		                 20 + rand() % 60, (RGB){rand() % 255,rand() % 255,rand() % 255}, 
+		                 rand() / (double) RAND_MAX));
+	}
+	
+	return scene;
 }
 
 

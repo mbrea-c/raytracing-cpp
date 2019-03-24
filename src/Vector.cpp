@@ -61,3 +61,7 @@ Vector3 Vector3::cross(Vector3 v)
 {
 	return Vector3(y*v.z - z*v.y, z*v.x - x*v.z, x*v.y - y*v.x);
 }
+
+Vector3 Vector3::fromBasis(Vector3 v0, Vector3 v1, Vector3 v2) {
+	return (x * v0 + y * v1 + z * v2);
+}
