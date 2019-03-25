@@ -3,13 +3,15 @@
 
 Plane::Plane(Vector3 n, double c, RGB col)
 {
-	normal = n;
-	offset = c;
-	color  = col;
-	reflectiveness = 0;
+	construct(n, c, col, 0);
 }
 
 Plane::Plane(Vector3 n, double c, RGB col, double r)
+{
+	construct(n, c, col, r);
+}
+
+void Plane::construct(Vector3 n, double c, RGB col, double r)
 {
 	normal = n;
 	offset = c;

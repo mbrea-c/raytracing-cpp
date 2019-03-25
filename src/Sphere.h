@@ -12,6 +12,7 @@ public:
 	Sphere(Vector3 p, double r, RGB col);
 	Sphere(Vector3 p, double r, RGB col, double reflex);
 	Sphere();
+	void construct(Vector3 p, double r, RGB col, double reflex);
 	std::list<Intersection> intersect (Vector3& origin, Vector3& direction);
 	double getRadius();
 };

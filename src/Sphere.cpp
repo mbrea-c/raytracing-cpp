@@ -5,14 +5,17 @@
 
 Sphere::Sphere(Vector3 p, double r, RGB col)
 {
-	pos    = p;
-	radius = r;
-	color  = col;
-	reflectiveness = 0;
+	construct(p, r, col, 0);
 }
 
 Sphere::Sphere(Vector3 p, double r, RGB col, double reflex)
 {
+	construct(p, r, col, reflex);
+}
+
+void Sphere::construct(Vector3 p, double r, RGB col, double reflex)
+{
+
 	pos    = p;
 	radius = r;
 	color  = col;
